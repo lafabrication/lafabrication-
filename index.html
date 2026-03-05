@@ -2,34 +2,34 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>LafaMarket</title>
+<title>LafaMarket - Marketplace</title>
 
 <style>
 body{
 font-family:Arial;
 margin:0;
-background:#f5f5f5;
+background:#f2f2f2;
 }
 
 header{
-background:#0a66ff;
+background:#0a3d62;
 color:white;
 padding:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+text-align:center;
+font-size:24px;
 }
 
-.logo{
-font-size:22px;
+nav{
+background:#1e90ff;
+padding:10px;
+text-align:center;
+}
+
+nav a{
+color:white;
+margin:10px;
+text-decoration:none;
 font-weight:bold;
-}
-
-.search{
-width:40%;
-padding:8px;
-border:none;
-border-radius:5px;
 }
 
 .container{
@@ -42,147 +42,121 @@ grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
 gap:20px;
 }
 
-.card{
+.product{
 background:white;
 padding:15px;
-border-radius:10px;
-box-shadow:0 2px 5px rgba(0,0,0,0.1);
-}
-
-.card img{
-width:100%;
-height:150px;
-object-fit:cover;
 border-radius:8px;
+box-shadow:0 2px 5px rgba(0,0,0,0.2);
+text-align:center;
 }
 
 button{
-background:#0a66ff;
+background:#0a3d62;
 color:white;
 border:none;
-padding:8px;
+padding:8px 12px;
 border-radius:5px;
 cursor:pointer;
-margin-top:5px;
 }
 
-.form{
-background:white;
-padding:20px;
-margin-bottom:30px;
-border-radius:10px;
-}
-
-input{
-width:100%;
-padding:8px;
-margin:5px 0;
-}
-
-.panier{
+.cart{
 position:fixed;
-right:20px;
-bottom:20px;
+right:0;
+top:0;
+width:250px;
+height:100%;
 background:white;
-padding:15px;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,0.2);
+border-left:2px solid #ccc;
+padding:10px;
+overflow:auto;
 }
 
+footer{
+background:#0a3d62;
+color:white;
+text-align:center;
+padding:10px;
+margin-top:30px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<div class="logo">LafaMarket</div>
-<input class="search" id="search" placeholder="Rechercher produit">
+LafaMarket
 </header>
+
+<nav>
+<a href="#">Accueil</a>
+<a href="#">Produits</a>
+<a href="#">Vendre</a>
+<a href="#">Contact</a>
+</nav>
 
 <div class="container">
 
-<div class="form">
-<h3>Vendre un produit</h3>
+<h2>Produits populaires</h2>
 
-<input id="name" placeholder="Nom produit">
-<input id="price" placeholder="Prix">
-<input id="image" placeholder="Lien image">
+<div class="products">
 
-<button onclick="addProduct()">Ajouter produit</button>
+<div class="product">
+<h3>iPhone 13</h3>
+<p>Prix: 2 000 000 Ar</p>
+<button onclick="addCart('iPhone 13')">Acheter</button>
+</div>
+
+<div class="product">
+<h3>Ordinateur HP</h3>
+<p>Prix: 1 500 000 Ar</p>
+<button onclick="addCart('HP Laptop')">Acheter</button>
+</div>
+
+<div class="product">
+<h3>Chaussure Nike</h3>
+<p>Prix: 200 000 Ar</p>
+<button onclick="addCart('Nike')">Acheter</button>
+</div>
+
+<div class="product">
+<h3>Smart TV</h3>
+<p>Prix: 1 200 000 Ar</p>
+<button onclick="addCart('Smart TV')">Acheter</button>
+</div>
 
 </div>
 
-<h2>Produits</h2>
+</div>
 
-<div class="products" id="products"></div>
+<div class="cart">
+
+<h3>Panier</h3>
+
+<ul id="cartlist"></ul>
 
 </div>
 
-<div class="panier">
-🛒 Panier: <span id="cartCount">0</span>
-</div>
+<footer>
+LafaMarket © 2026
+</footer>
 
 <script>
 
-let products = JSON.parse(localStorage.getItem("products")) || [];
-let cart = [];
+let cart=[];
 
-function renderProducts(){
+function addCart(product){
 
-let list = document.getElementById("products");
-list.innerHTML="";
+cart.push(product)
 
-let search = document.getElementById("search").value.toLowerCase();
+let list=document.getElementById("cartlist")
 
-products
-.filter(p=>p.name.toLowerCase().includes(search))
-.forEach((p,i)=>{
+let li=document.createElement("li")
 
-list.innerHTML += `
-<div class="card">
+li.innerText=product
 
-<img src="${p.image}">
-
-<h4>${p.name}</h4>
-
-<p>${p.price} Ar</p>
-
-<button onclick="addCart()">Acheter</button>
-
-</div>
-`;
-
-});
+list.appendChild(li)
 
 }
-
-function addProduct(){
-
-let name=document.getElementById("name").value;
-let price=document.getElementById("price").value;
-let image=document.getElementById("image").value;
-
-if(!name || !price) return;
-
-products.push({name,price,image});
-
-localStorage.setItem("products",JSON.stringify(products));
-
-renderProducts();
-
-}
-
-function addCart(){
-
-cart.push(1);
-
-document.getElementById("cartCount").innerText = cart.length;
-
-}
-
-document.getElementById("search").addEventListener("input",renderProducts);
-
-renderProducts();
 
 </script>
 
